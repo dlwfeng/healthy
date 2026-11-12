@@ -1,0 +1,74 @@
+# 本地健康数据
+/data/
+/temp/
+
+# Python相关
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+/lib/
+/lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 虚拟环境
+venv/
+ENV/
+env/
+**/.venv/
+/.codex/
+/garmin-mcp/.codex/
+
+# 操作系统相关
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 日志文件
+*.log
+
+# 本地配置文件
+/.env
+config.json
+discord_config.json
+garmin_token.json
+/garmin-mcp/config/garmin.json
+/garmin-mcp/config/garmin_token.json
+/services/api/.pi-agent/
+
+# Local analysis output
+graphify-out/
+
+# Node.js local dependencies
+node_modules/
+
+# 本地文档与内部开发记录（不公开）
+/docs/
+/AGENTS.md
+**/AGENTS.md
+
+# 签名与打包产物
+*.jks
+*.keystore
+**/key.properties
+**/*.apk
+
+# Garmin MCP 本地提示词草稿
+/garmin-mcp/docs/

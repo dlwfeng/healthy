@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "garmin-mcp"
+version = "0.1.0"
+description = "Garmin Connect MCP Server - AI-powered health data access"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "dlwfeng"}
+]
+dependencies = [
+    "mcp>=1.0.0,<2.0.0",
+    "garminconnect>=0.2.0,<0.3.0",
+    "starlette>=0.48.0,<2.0.0",
+    "uvicorn>=0.31.1,<1.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["garmin_mcp*"]
+
+[project.scripts]
+garmin-mcp = "garmin_mcp.cli:main"

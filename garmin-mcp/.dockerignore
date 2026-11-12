@@ -1,0 +1,10 @@
+.git
+.codex
+.venv
+venv
+__pycache__
+*.pyc
+*.egg-info
+config/garmin.json
+config/garmin_token.json
+graphify-out

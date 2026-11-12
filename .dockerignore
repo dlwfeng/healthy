@@ -1,0 +1,10 @@
+.git
+**/.venv
+**/node_modules
+apps/mobile
+docs
+garmin-mcp/config/garmin.json
+garmin-mcp/config/garmin_token.json
+graphify-out
+temp
+data

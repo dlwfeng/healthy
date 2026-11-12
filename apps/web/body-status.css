@@ -1,0 +1,700 @@
+/* 生理指标页：一屏给结论，细节折起来。
+   视觉参考体脂秤类应用的深色数据面板：一个大数值、同权重的成分砖、克制的分区线。 */
+
+.body-status-page.bsv {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  container-type: inline-size;
+}
+
+/* ---------- 提示 ---------- */
+.bsv-notice {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--surface-alt);
+  color: var(--muted);
+  font-size: 13px;
+}
+.bsv-notice.warn {
+  background: var(--orange-soft);
+  color: var(--text);
+}
+.bsv-notice.muted {
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--faint);
+  font-size: 12px;
+}
+.bsv-notice .text-link {
+  margin-left: 6px;
+}
+
+/* ---------- 主卡 ---------- */
+.bsv-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  padding: 26px 28px 22px;
+  border-radius: 24px;
+  background:
+    radial-gradient(120% 140% at 100% 0%, #1d5560 0%, transparent 58%),
+    linear-gradient(158deg, #16343c 0%, #0f2027 100%);
+  color: #eef7f8;
+  box-shadow: 0 18px 40px -28px #0a1a20;
+}
+
+.bsv-hero-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bsv-eyebrow {
+  margin: 0;
+  font-size: 13px;
+  color: #9dc0c4;
+  letter-spacing: 0.02em;
+}
+.bsv-eyebrow span {
+  display: block;
+  margin-top: 2px;
+  color: #7fa3a8;
+  font-size: 12px;
+}
+
+.bsv-weight {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.bsv-weight strong {
+  font-size: clamp(52px, 9vw, 76px);
+  line-height: 0.95;
+  font-weight: 550;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+}
+.bsv-weight small {
+  font-size: 16px;
+  color: #9dc0c4;
+  margin-right: 4px;
+}
+.bsv-weight.empty {
+  font-size: 22px;
+  color: #7fa3a8;
+  font-weight: 400;
+}
+
+.bsv-delta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #ffffff14;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.bsv-delta span {
+  font-size: 11px;
+  color: #8fb2b7;
+}
+.bsv-delta.down { color: #7fe0c8; }
+.bsv-delta.up { color: #ffb98a; }
+
+.bsv-hero-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-height: 28px;
+}
+.bsv-goal {
+  font-size: 12px;
+  color: #9dc0c4;
+  font-variant-numeric: tabular-nums;
+}
+
+.bsv-sync {
+  border: 1px solid #ffffff2b;
+  background: #ffffff0f;
+  color: #dff1f3;
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.bsv-sync:hover:not(:disabled) { background: #ffffff1f; }
+.bsv-sync:disabled { opacity: 0.6; cursor: default; }
+
+.bsv-source {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #7fa3a8;
+}
+.bsv-source.warn { color: #ffc79b; }
+.bsv-source a {
+  color: #9fe3d5;
+  text-decoration: underline;
+}
+
+/* 深色卡里的曲线：把应用通用曲线的颜色压到同一个色系 */
+.bsv-hero .trend-chart,
+.bsv-hero .spark {
+  margin-top: 4px;
+}
+.bsv-hero .trend-chart svg,
+.bsv-hero .spark svg {
+  max-height: 84px;
+}
+.bsv-hero .spark-empty {
+  color: #7fa3a8;
+  font-size: 12px;
+}
+
+/* ---------- 评分环 ---------- */
+.bsv-hero-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-left: 8px;
+}
+
+.bsv-score {
+  position: relative;
+  width: 116px;
+  height: 116px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.bsv-score svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.bsv-score circle {
+  fill: none;
+  stroke-width: 7;
+}
+.bsv-score .track { stroke: #ffffff1f; }
+.bsv-score .value {
+  stroke: #64e0c2;
+  stroke-linecap: round;
+}
+.bsv-score strong {
+  font-size: 32px;
+  font-weight: 550;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.bsv-score small {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: #8fb2b7;
+}
+
+.bsv-seconds {
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+}
+.bsv-seconds div {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: baseline;
+  font-size: 12px;
+}
+.bsv-seconds dt { color: #8fb2b7; }
+.bsv-seconds dd {
+  margin: 0;
+  color: #dff1f3;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 分区 ---------- */
+.bsv-block {
+  padding: 20px 22px 18px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.bsv-block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 4px;
+  margin-bottom: 14px;
+}
+.bsv-block-head h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+.bsv-block-head span {
+  font-size: 12px;
+  color: var(--faint);
+}
+.bsv-block-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.bsv-hint-band {
+  width: 16px;
+  height: 8px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--teal) 34%, var(--track));
+  box-shadow: inset 0 0 0 1px var(--teal);
+}
+.bsv-composition-note {
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--faint);
+}
+
+.bsv-empty {
+  margin: 0;
+  color: var(--faint);
+  font-size: 13px;
+}
+
+/* ---------- 体成分 ---------- */
+.bsv-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.bsv-tile {
+  padding: 14px 16px 12px;
+  border-radius: 14px;
+  background: var(--surface-alt);
+  min-width: 0;
+}
+.bsv-tile-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.bsv-tile-head em {
+  font-style: normal;
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--track);
+  color: var(--muted);
+}
+.bsv-tile-head em.ok {
+  background: var(--teal-soft);
+  color: var(--teal);
+}
+.bsv-tile-head em.warn {
+  background: var(--orange-soft);
+  color: var(--orange);
+}
+.bsv-tile-value {
+  margin-top: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: 26px;
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.bsv-tile-value small {
+  margin-right: 6px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--faint);
+  letter-spacing: 0;
+}
+.bsv-tile-value i {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.bsv-tile-value i.up { color: var(--orange); }
+.bsv-tile-value i.down { color: var(--teal); }
+
+/* 量程轴：两端是偏低/偏高区，绿色段是合理区间，竖线是当前值 */
+.bsv-axis {
+  margin-top: 12px;
+}
+.bsv-axis-track {
+  position: relative;
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--track);
+}
+.bsv-axis-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 4px 0 0 4px;
+  background: color-mix(in srgb, var(--orange) 20%, var(--track));
+}
+.bsv-axis-zone.high {
+  left: auto;
+  right: 0;
+  border-radius: 0 4px 4px 0;
+}
+.bsv-axis-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--teal) 34%, var(--track));
+  box-shadow:
+    inset 1px 0 0 var(--teal),
+    inset -1px 0 0 var(--teal);
+}
+.bsv-axis-mark {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--text);
+  box-shadow:
+    0 0 0 2px var(--surface-alt),
+    0 1px 4px #00000026;
+}
+.bsv-axis-labels {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 7px;
+  font-size: 10px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.bsv-axis-labels small {
+  white-space: nowrap;
+}
+.bsv-axis-labels small:nth-child(2) {
+  text-align: center;
+  color: var(--teal);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bsv-tile-note {
+  margin: 5px 0 0;
+  font-size: 10px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 今日恢复 ---------- */
+.bsv-units {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.bsv-unit {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface-alt);
+  min-width: 0;
+}
+.bsv-unit-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.bsv-unit-head em {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--teal);
+}
+.bsv-unit-value {
+  margin-top: 6px;
+  font-size: 28px;
+  font-weight: 550;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.bsv-unit-value small {
+  margin-left: 3px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--faint);
+}
+.bsv-unit p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+/* ---------- 训练负荷 ---------- */
+.bsv-ratio {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.bsv-ratio-count {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.bsv-ratio-count strong {
+  font-size: 34px;
+  font-weight: 550;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.bsv-ratio-count small {
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.bsv-ratio-scale {
+  flex: 1;
+  min-width: 200px;
+}
+.bsv-ratio-track {
+  position: relative;
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--track) 0%, var(--teal-soft) 33%, var(--teal-soft) 62%, var(--orange-soft) 100%);
+}
+.bsv-ratio-track i {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--text);
+  box-shadow: 0 0 0 3px var(--surface);
+}
+.bsv-ratio-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.bsv-load-facts {
+  margin: 16px 0 0;
+  display: flex;
+  gap: 28px;
+}
+.bsv-load-facts dt {
+  font-size: 11px;
+  color: var(--faint);
+}
+.bsv-load-facts dd {
+  margin: 2px 0 0;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bsv-focus {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+.bsv-focus-row {
+  display: grid;
+  grid-template-columns: 5.6em minmax(0, 1fr) 3.8em;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.bsv-focus-row > span:first-child {
+  white-space: nowrap;
+}
+.bsv-focus-row strong {
+  text-align: right;
+  font-weight: 500;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.bsv-focus-track {
+  position: relative;
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--track);
+  overflow: hidden;
+}
+.bsv-focus-track .target {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--teal-soft);
+}
+.bsv-focus-track .fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 4px;
+  background: var(--teal);
+  opacity: 0.85;
+}
+
+/* ---------- 其他指标 ---------- */
+.bsv-more {
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 0 20px;
+}
+.bsv-more > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 0;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+  list-style: none;
+}
+.bsv-more > summary::-webkit-details-marker { display: none; }
+.bsv-more > summary span {
+  font-size: 12px;
+  color: var(--faint);
+}
+.bsv-more > summary::after {
+  content: "展开";
+  font-size: 12px;
+  color: var(--faint);
+}
+.bsv-more[open] > summary::after { content: "收起"; }
+
+.bsv-more-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  margin: 0 -20px;
+  padding: 1px 0 0;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  overflow: hidden;
+}
+.bsv-more-grid > div {
+  background: var(--surface);
+  padding: 12px 20px;
+}
+.bsv-more-grid dt {
+  font-size: 11px;
+  color: var(--faint);
+}
+.bsv-more-grid dd {
+  margin: 3px 0 0;
+  font-size: 15px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.bsv-more-grid small {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+/* ---------- 响应式 ---------- */
+@container (max-width: 720px) {
+  .bsv-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 22px 20px 18px;
+  }
+  .bsv-hero-side {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0 0;
+    border-top: 1px solid #ffffff1a;
+    padding-top: 16px;
+  }
+  .bsv-score { width: 92px; height: 92px; }
+  .bsv-score strong { font-size: 26px; }
+  .bsv-seconds { text-align: left; }
+  .bsv-seconds div { justify-content: flex-start; }
+  .bsv-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* 两列时中间的范围说明单独一行，避免长区间（如基础代谢）被截断 */
+  .bsv-axis-labels {
+    grid-template-columns: auto auto;
+    row-gap: 2px;
+  }
+  .bsv-axis-labels small:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .bsv-axis-labels small:nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    text-align: left;
+  }
+  .bsv-axis-labels small:nth-child(3) {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+  .bsv-units { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bsv-more-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 520px) {
+  .bsv-hero-side {
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+  }
+  .bsv-weight strong { font-size: 56px; }
+  .bsv-tile-value { font-size: 22px; }
+  .bsv-unit-value { font-size: 24px; }
+  .bsv-focus-row { grid-template-columns: 4.6em minmax(0, 1fr) 3.2em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bsv-sync { transition: none; }
+}
+
+/* 深色主题下主卡保持最暗的一层，避免和页面底色糊在一起 */
+:root[data-theme="dark"] .bsv-hero {
+  background:
+    radial-gradient(120% 140% at 100% 0%, #1b4a52 0%, transparent 58%),
+    linear-gradient(158deg, #14262c 0%, #0c181d 100%);
+  box-shadow: none;
+}

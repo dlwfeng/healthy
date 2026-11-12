@@ -1,0 +1,32 @@
+{
+  "name": "zhixu-api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "13.0.3",
+    "@earendil-works/pi-ai": "1.1.0",
+    "@earendil-works/pi-coding-agent": "1.1.0",
+    "@modelcontextprotocol/client": "2.3.1",
+    "@sinclair/typebox": "^0.34.48",
+    "css-tree": "3.2.1",
+    "parse5": "8.0.1",
+    "pg": "^8.23.1",
+    "pi-hermes-memory": "0.9.11",
+    "sharp": "0.35.5"
+  },
+  "overrides": {
+    "@earendil-works/pi-agent-core": "1.1.0",
+    "@earendil-works/pi-codemode": "1.1.0",
+    "@earendil-works/pi-mcp": "1.1.0",
+    "@earendil-works/pi-telemetry": "1.1.0",
+    "@earendil-works/pi-tui": "1.1.0"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  }
+}

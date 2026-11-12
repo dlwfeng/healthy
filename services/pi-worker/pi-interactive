@@ -1,0 +1,3 @@
+#!/bin/sh
+exec /usr/local/lib/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js \
+  --no-extensions -e "$PI_PROVIDER_EXTENSION" "$@"

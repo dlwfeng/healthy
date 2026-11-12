@@ -1,0 +1,111 @@
+name: healthy
+
+services:
+  pi-worker:
+    build:
+      context: .
+      dockerfile: services/pi-worker/Dockerfile
+      pull: false
+    image: healthy-pi-worker:local
+    pull_policy: never
+    restart: unless-stopped
+    init: true
+    working_dir: ${PI_PROJECT_ROOT:-/workspace/healthy}
+    environment:
+      HTTP_PROXY: ${PI_HTTP_PROXY:-}
+      HTTPS_PROXY: ${PI_HTTPS_PROXY:-}
+      NO_PROXY: localhost,127.0.0.1,api
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /root
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - .:${PI_PROJECT_ROOT:-/workspace/healthy}:ro
+      - ./data/feedback/worktrees:${PI_PROJECT_ROOT:-/workspace/healthy}/data/feedback/worktrees
+      - ./data/feedback/pi-runtime:/root/.pi/agent
+
+  frontend:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "3060:80"
+    volumes:
+      - ./apps/web:/usr/share/nginx/html:ro
+      - ./services/frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  api:
+    build:
+      context: .
+      dockerfile: services/api/Dockerfile
+      pull: false
+    image: healthy-api:local
+    pull_policy: never
+    restart: unless-stopped
+    environment:
+      PORT: "8060"
+      BIND_HOST: "0.0.0.0"
+      GARMIN_MCP_URL: http://mcp:8765/mcp
+      MINIMAX_CN_API_KEY: ${MINIMAX_CN_API_KEY:-}
+      MINIMAX_MEAL_MODEL: ${MINIMAX_MEAL_MODEL:-}
+      DATABASE_URL: postgres://health:${HEALTH_DB_PASSWORD:-healthy_local_dev}@db:5432/health
+      ZEPP_APP_TOKEN: ${ZEPP_APP_TOKEN:-}
+      ZEPP_USER_ID: ${ZEPP_USER_ID:-}
+      ZEPP_BASE_URL: ${ZEPP_BASE_URL:-https://api-mifit-cn.huami.com}
+      MOBILE_RELEASE_DIR: /app/data/mobile-releases
+    volumes:
+      - ./data/mobile-releases:/app/data/mobile-releases:ro
+      - ./data/feedback/config.json:/app/data/feedback/config.json:ro
+      - memory:/app/services/api/.pi-agent
+    depends_on:
+      mcp:
+        condition: service_started
+      db:
+        condition: service_healthy
+    networks:
+      - default
+      - mcp_private
+    ports:
+      - "127.0.0.1:8060:8060"
+  mcp:
+    build:
+      context: ./garmin-mcp
+      dockerfile: Dockerfile
+      pull: false
+    image: garmin-mcp:local
+    pull_policy: never
+    container_name: garmin-mcp
+    restart: unless-stopped
+    command: ["python", "-m", "garmin_mcp.http"]
+    environment:
+      MCP_BIND_HOST: "0.0.0.0"
+      MCP_PORT: "8765"
+      GARMIN_CONFIG_PATH: /app/config/garmin.json
+    networks:
+      - mcp_private
+    volumes:
+      - ./garmin-mcp/config/garmin.json:/app/config/garmin.json:ro
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: health
+      POSTGRES_PASSWORD: ${HEALTH_DB_PASSWORD:-healthy_local_dev}
+      POSTGRES_DB: health
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U health -d health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+networks:
+  mcp_private:
+
+volumes:
+  db:
+  memory:

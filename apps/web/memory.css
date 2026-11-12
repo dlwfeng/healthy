@@ -1,0 +1,14 @@
+.memory-page { max-width: 880px; margin: 0 auto; padding-bottom: 32px; }
+.memory-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; margin-bottom:28px; }
+.memory-heading h1 { font-size:26px; margin:0 0 10px; letter-spacing:-.03em; }
+.memory-heading p { color:var(--muted); max-width:62ch; margin:0; line-height:1.8; }
+.memory-heading button { flex-shrink:0; min-height:44px; padding:0 18px; }
+.memory-count { color:var(--muted); font-size:13px; margin:0 0 12px; }
+.memory-list { padding:0; margin:0; list-style:none; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); }
+.memory-list li { padding:22px 24px; border-bottom:1px solid var(--line); }
+.memory-list li:last-child { border-bottom:0; }
+.memory-meta { display:flex; gap:16px; justify-content:space-between; color:var(--muted); font-size:13px; }
+.memory-list p { margin:10px 0 0; font-size:16px; line-height:1.85; white-space:pre-wrap; overflow-wrap:anywhere; }
+.memory-state { padding:52px 24px; text-align:center; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); color:var(--muted); }
+.memory-state h2 { color:var(--text); font-size:18px; }
+@media(max-width:600px) { .memory-heading { gap:16px; }.memory-list li { padding:18px; }.memory-heading h1 { font-size:23px; } }
