@@ -1,105 +1,496 @@
-/* Dense, read-only health cockpit. All rules are scoped to the home surface. */
-.health-cockpit { --cockpit-gap: 12px; }
-.health-cockpit .page-heading { margin-bottom: 18px; align-items: center; }
-.health-cockpit .page-heading h1 { font-size: 26px; letter-spacing: -.8px; }
-.health-cockpit .page-heading p { margin-top: 5px; font-size: 12px; }
-.cockpit-vitals { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); margin-bottom: var(--cockpit-gap); background: var(--deep); border-radius: 14px; color: var(--deep-text); padding: 18px 6px; }
-.cockpit-metric { min-width: 0; padding: 0 18px; font-variant-numeric: tabular-nums; }
-.cockpit-metric > span { display: block; font-size: 12px; color: var(--muted); }
-.cockpit-metric > div { display: flex; align-items: baseline; gap: 5px; margin: 5px 0; }
-.cockpit-metric strong { font-size: 30px; font-weight: 650; letter-spacing: -1px; line-height: 1.2; }
-.cockpit-metric small { font-size: 11px; font-weight: 400; letter-spacing: 0; }
-.cockpit-metric p { font-size: 11px; color: var(--muted); margin: 0; }
-.cockpit-vitals .cockpit-metric + .cockpit-metric { border-left: 1px solid #ffffff26; }
-.cockpit-vitals .cockpit-metric > span, .cockpit-vitals .cockpit-metric p { color: #d0e7e0; }
-.cockpit-grid { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr); gap: var(--cockpit-gap); align-items: start; }
-.cockpit-panel { min-width: 0; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-.cockpit-section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 15px; }
-.cockpit-section-head h2 { font-size: 15px; letter-spacing: -.3px; }
-.cockpit-section-head > span { color: var(--muted); font-size: 11px; text-align: right; }
-.cockpit-energy { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); padding-bottom: 15px; gap: 12px; }
-.cockpit-energy > div > span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
-.cockpit-energy strong { display: inline-block; font-size: 32px; font-weight: 650; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
-.cockpit-energy > div:first-child strong { color: var(--teal); }
-.cockpit-energy strong small { margin-left: 5px; font-size: 11px; letter-spacing: 0; font-weight: 400; }
-.cockpit-nutrients { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); background: var(--surface-alt); border-radius: 8px; padding: 12px 0; }
-.cockpit-nutrient { padding: 0 12px; border-left: 3px solid var(--color); }
-.cockpit-nutrient > span, .cockpit-nutrient > small { display: block; font-size: 11px; color: var(--muted); }
-.cockpit-nutrient strong { display: block; font-size: 21px; margin: 3px 0; font-variant-numeric: tabular-nums; }
-.cockpit-nutrient strong small { font-size: 11px; font-weight: 400; }
-.cockpit-meals { margin-top: 12px; }
-.cockpit-meal-row { display: grid; grid-template-columns: 35px 30px minmax(0,1fr) auto; gap: 8px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); font-size: 11px; }
-.cockpit-meal-row time, .cockpit-meal-kind { color: var(--muted); }
-.cockpit-meal-row strong { font-size: 12px; font-weight: 550; overflow-wrap: anywhere; }
-.cockpit-meal-row small, .cockpit-activity-row small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
-.cockpit-meal-row > span:last-child { text-align: right; font-variant-numeric: tabular-nums; }
-.cockpit-meal-row b { font-size: 15px; }
-.cockpit-footnote { font-size: 10px; color: var(--muted); margin: 10px 0 0; }
-.cockpit-empty { padding: 12px 0; font-size: 12px; color: var(--muted); margin: 0; }
-.cockpit-signal-values { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
-.cockpit-signal-values .cockpit-metric { padding: 0 10px 0 0; }
-.cockpit-signal-values .cockpit-metric strong { font-size: 25px; color: var(--color); }
-.cockpit-chart-title { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px; font-size: 10px; color: var(--muted); margin: 18px 0 8px; }
-.cockpit-sleep-stages { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 10px; color: var(--muted); margin-top: 8px; }
-.cockpit-sleep-stages b { color: var(--text); font-weight: 500; }
-.cockpit-reports { grid-row: span 2; }
-.cockpit-report + .cockpit-report { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
-.cockpit-report-meta { display: flex; gap: 10px; align-items: center; font-size: 11px; }
-.cockpit-report-meta > span { background: var(--teal-soft); color: var(--teal); padding: 3px 7px; border-radius: 4px; }
-.cockpit-report-meta time { color: var(--muted); }
-.cockpit-report h3 { margin: 10px 0 6px; font-size: 13px; line-height: 1.6; font-weight: 600; }
-.cockpit-report p { font-size: 12px; line-height: 1.9; margin: 0; overflow-wrap: anywhere; }
-.cockpit-activity-totals { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 12px; }
-.cockpit-activity-totals .cockpit-metric { padding: 0; }
-.cockpit-activity-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 12px; }
-.cockpit-activity-row > div { min-width: 0; }
-.cockpit-activity-row > div:last-child { flex-shrink: 0; text-align: right; }
-.cockpit-journal-text { font-size: 12px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
-@media(min-width:1200px) { .cockpit-reports { grid-column: 1; } .cockpit-activity, .cockpit-journal { grid-column: 2; } }
-@media(max-width:700px) {
-  .health-cockpit { --cockpit-gap: 10px; }
-  .health-cockpit .page-heading { display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 14px; }
-  .health-cockpit .page-heading h1 { font-size: 24px; }
-  .health-cockpit .page-heading .eyebrow { font-size: 10px; }
-  .health-cockpit .date-selector { width: 100%; justify-content: center; margin: 0; }
-  .cockpit-vitals { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 0; }
-  .cockpit-vitals .cockpit-metric { padding: 13px 16px; }
-  .cockpit-vitals .cockpit-metric + .cockpit-metric { border: 0; }
-  .cockpit-vitals .cockpit-metric:nth-child(even) { border-left: 1px solid #ffffff26; }
-  .cockpit-vitals .cockpit-metric:nth-child(n+3) { border-top: 1px solid #ffffff26; }
-  .cockpit-metric strong { font-size: 28px; }
-  .cockpit-grid { grid-template-columns: minmax(0,1fr); }
-  .cockpit-panel { padding: 15px; }
-  .cockpit-reports { grid-row: auto; order: 3; }
-  .cockpit-food { order: 1; }.cockpit-signals { order: 2; }.cockpit-activity { order: 4; }.cockpit-journal { order: 5; }
-  .cockpit-energy strong { font-size: 29px; }
-  .cockpit-nutrient { padding: 0 9px; }
-  .cockpit-nutrient strong { font-size: 20px; }
-  .cockpit-section-head { margin-bottom: 12px; }
+/* Home classes are isolated from existing global metric layouts. */
+.health-home{--blue:#2a78d6;--green:#268268;--orange:#d77728;--purple:#8066bc;--red:#d15b67;--cyan:#29a4b6;--home-track:#e9eef2;--home-soft:#f0f3f6;--home-empty:#fafbfd;color:var(--text);font-family:"Avenir Next","PingFang SC","Microsoft YaHei",sans-serif}
+.health-home a{color:inherit;text-decoration:none}
+.health-home a:focus-visible,.health-home summary:focus-visible,.health-home canvas:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+.health-home svg{display:block}
+.health-home a:hover{color:var(--blue)}
+.health-home .hh-section{margin-top:32px}
+.health-home .hh-section:first-of-type{margin-top:0}
+.health-home .hh-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:14px}
+.health-home .hh-section-title{display:flex;align-items:baseline;gap:12px}
+.health-home .hh-section-head h2{font-size:18px;margin:0;letter-spacing:-.4px;font-weight:650}
+.health-home .hh-source{color:var(--muted);font-size:11px}
+.health-home .hh-section-head a{color:var(--blue);font-size:12px}
+.health-home .hh-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:stretch}
+.health-home .hh-wide{grid-column:span 2}
+.health-home .hh-card{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:18px;min-width:0;display:flex;flex-direction:column;position:relative;min-height:210px}
+.health-home .hh-card-head{display:flex;align-items:center;margin-bottom:18px;gap:9px}
+.health-home .hh-card-head h3{margin:0;font-size:13px;font-weight:550}
+.health-home .hh-glyph{width:22px;height:22px;flex-shrink:0;display:grid;place-items:center;color:var(--tone,var(--blue))}
+.health-home .hh-glyph svg{width:21px;height:21px}
+.health-home .hh-value{font-size:34px;letter-spacing:-1.2px;line-height:1.2;font-weight:500;font-variant-numeric:normal}
+.health-home .hh-value small{font-size:11px;letter-spacing:0;margin-left:4px;font-weight:400;color:var(--muted)}
+.health-home .hh-sub{font-size:11px;color:var(--muted);margin-top:6px}
+.health-home .hh-small-muted{font-size:11px;color:var(--muted)}
+.health-home .hh-foot{margin-top:auto;padding-top:18px;font-size:10px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.health-home .hh-tag{display:inline-flex;align-items:center;gap:5px;border-radius:4px;font-size:11px;background:var(--home-green-soft);color:var(--home-green-text);padding:3px 7px;align-self:flex-start;white-space:nowrap}
+.health-home .hh-tag.hh-warn{background:var(--home-orange-soft);color:var(--home-warning-text)}
+.health-home .hh-status-value{font-size:23px;font-weight:500;letter-spacing:-.5px}
+.health-home .hh-status-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.health-home .hh-loading{color:var(--muted);font-size:13px;padding:28px 0}
+.health-home .hh-error{color:var(--home-warning-text)}
+.health-home .hh-text-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--blue)}
+.health-home .hh-text-link svg{width:14px;height:14px}
+.health-home .hh-refreshing .hh-grid,.health-home .hh-refreshing .hh-journal{opacity:.5}
+.health-home .hh-ring{width:145px;height:145px;position:relative;margin:0 auto}
+.health-home .hh-ring svg{width:100%;height:100%}
+.health-home .hh-ring-track{fill:none;stroke:var(--home-track);stroke-width:8}
+.health-home .hh-ring-fill{fill:none;stroke:var(--ring-color,var(--blue));stroke-width:8;stroke-linecap:round}
+.health-home .hh-ring-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.health-home .hh-ring-center strong{font-size:34px;font-weight:500;letter-spacing:-1px}
+.health-home .hh-ring-center small{font-size:11px;color:var(--muted);margin-top:0}
+.health-home .hh-gauge{width:184px;max-width:100%;height:155px;position:relative;margin:-4px auto 0}
+.health-home .hh-gauge svg{width:100%;height:100%}
+.health-home .hh-gauge-center{position:absolute;inset:50px 0 0;display:flex;align-items:center;flex-direction:column}
+.health-home .hh-gauge-center .hh-value{font-size:37px}
+.health-home .hh-gauge-center>span{margin-top:4px;font-size:12px;color:var(--muted)}
+.health-home .hh-stack{height:9px;display:flex;gap:2px;margin:20px 0 12px;border-radius:3px;overflow:hidden;flex-shrink:0}
+.health-home .hh-stack>span{min-width:0;position:relative}
+.health-home .hh-stack>span:hover{filter:brightness(.9)}
+.health-home .hh-legend{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;font-size:10px}
+.health-home .hh-legend>span{display:grid;grid-template-columns:6px 1fr;align-items:center;gap:3px 5px}
+.health-home .hh-legend i,.health-home .hh-macro-labels i{width:6px;height:6px;display:inline-block;border-radius:1px}
+.health-home .hh-legend b{grid-column:2;font-size:13px;font-weight:500;color:var(--text)}
+.health-home .hh-legend b small{font-size:10px;font-weight:400;color:var(--muted);margin-left:3px}
+.health-home .hh-target-track{height:9px;background:var(--home-track);position:relative;margin:17px 0 7px;border-radius:3px}
+.health-home .hh-target-fill{position:absolute;height:100%;background:var(--focus-color,var(--blue));border-radius:3px}
+.health-home .hh-target-zone{position:absolute;top:-4px;height:17px;border:1px dashed #75828c;border-radius:3px;background:#ffffff18}
+.health-home .hh-range-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted)}
+.health-home .hh-plot{position:relative;width:100%;min-width:0;margin-top:15px}
+.health-home .hh-plot canvas{width:100%;height:100%}
+.health-home .hh-chart-empty{display:grid;place-items:center;color:var(--muted);font-size:11px;min-height:80px}
+.health-home .hh-data-table{font-size:10px;text-align:right;margin-top:3px;color:var(--muted)}
+.health-home .hh-data-table>summary{cursor:pointer;display:inline-block;padding:2px 0 2px 8px;min-height:20px}
+.health-home .hh-data-table>summary::before{content:"+";margin-right:4px}
+.health-home .hh-data-table[open]>summary::before{content:"−"}
+.health-home .hh-table-scroll{max-height:160px;overflow:auto;margin-top:6px;border:1px solid var(--line);border-radius:4px;background:var(--surface);text-align:left}
+.health-home .hh-data-table table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.health-home .hh-data-table th,.health-home .hh-data-table td{padding:5px 8px;border-bottom:1px solid var(--line);font-weight:400}
+.health-home .hh-data-table th{position:sticky;top:0;background:var(--surface-alt)}
+.health-home .hh-data-table td:last-child,.health-home .hh-data-table th:last-child{text-align:right}
+.health-home .hh-summary .hh-card{min-height:250px}
+.health-home .hh-summary .hh-card-head{margin-bottom:10px}
+.health-home .hh-summary .hh-value{font-size:36px}
+.health-home .hh-summary .hh-steps-card .hh-ring{width:155px;height:155px}
+.health-home .hh-summary .hh-steps-card .hh-foot{padding-top:6px}
+.health-home .hh-summary .hh-sleep-card .hh-value{margin-top:7px}
+.health-home .hh-summary .hh-sleep-card .hh-value>.hh-value{display:contents}
+.health-home .hh-summary .hh-sleep-card .hh-stack{margin-top:25px}
+.health-home .hh-summary .hh-sleep-card .hh-legend{gap:7px 18px}
+.health-home .hh-summary .hh-battery-card .hh-value,.health-home .hh-summary .hh-energy-card .hh-value{margin-top:7px}
+.health-home .hh-summary .hh-battery-card .hh-plot{margin-top:11px}
+.health-home .hh-summary .hh-battery-card .hh-foot{padding-top:6px}
+.health-home .hh-summary .hh-energy-card .hh-stack{margin-top:30px}
+.health-home .hh-summary .hh-energy-card .hh-legend{grid-template-columns:1fr 1fr}
+.health-home .hh-garmin-grid .hh-card{min-height:272px}
+.health-home .hh-garmin-grid .hh-card-head{margin-bottom:19px}
+.health-home .hh-readiness-card .hh-foot{border-top:1px solid var(--surface-alt);padding-top:12px}
+.health-home .hh-paired-values{display:flex;align-items:center;gap:10px;margin:20px 0 0}
+.health-home .hh-paired-values>span{font-size:23px;color:#a1aab3}
+.health-home .hh-paired-values .hh-value{font-size:30px}
+.health-home .hh-paired-values>div:last-child .hh-value{font-size:25px;color:var(--muted)}
+.health-home .hh-paired-values label{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+.health-home .hh-load-card .hh-tag{margin-top:-3px}
+.health-home .hh-focus-title{font-size:17px;line-height:1.4;max-width:13em}
+.health-home .hh-focus-rows{margin-top:14px}
+.health-home .hh-focus-item{margin-top:9px}
+.health-home .hh-focus-item>div:first-child{display:flex;justify-content:space-between;font-size:10px;gap:10px}
+.health-home .hh-focus-item strong{font-weight:500;font-variant-numeric:tabular-nums}
+.health-home .hh-focus-item .hh-target-track{margin:7px 0 0;height:7px}
+.health-home .hh-focus-item .hh-target-zone{top:-3px;height:13px}
+.health-home .hh-focus-card .hh-foot{font-size:9px;padding-top:18px}
+.health-home .hh-baseline-readout{display:flex;justify-content:space-between;gap:5px;margin-top:19px;font-size:10px;color:var(--muted)}
+.health-home .hh-baseline-readout strong{font-weight:500;color:var(--text)}
+.health-home .hh-hrv-card .hh-plot{margin-top:8px}
+.health-home .hh-baseline-meter{margin-top:10px;min-height:55px}
+.health-home .hh-hrv-card .hh-foot{padding-top:6px}
+.health-home .hh-intensity-card .hh-ring{margin-top:-9px;width:143px;height:143px}
+.health-home .hh-intensity-split{display:flex;justify-content:center;gap:12px;font-size:10px;color:var(--muted);margin-top:6px}
+.health-home .hh-intensity-split b{font-weight:500;color:var(--text)}
+.health-home .hh-intensity-card .hh-foot{justify-content:center}
+.health-home .hh-training-emblem{width:49px;height:49px;background:var(--home-orange-soft);border-radius:50%;display:grid;place-items:center;margin:0 0 13px}
+.health-home .hh-training-emblem svg{width:29px;height:29px;color:var(--home-warning-text)}
+.health-home .hh-training-caption{display:grid;grid-template-columns:1fr auto;gap:4px 16px;margin-top:16px;font-size:10px;color:var(--muted)}
+.health-home .hh-training-caption b{font-weight:500;color:var(--text)}
+.health-home .hh-age-hero{display:flex;align-items:baseline;gap:12px;margin:6px 0 25px}
+.health-home .hh-age-hero>span{font-size:11px;color:var(--muted)}
+.health-home .hh-age-comparison{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);padding-top:15px}
+.health-home .hh-age-comparison>div+div{border-left:1px solid var(--line);padding-left:15px}
+.health-home .hh-age-comparison span{font-size:10px;color:var(--muted);display:block}
+.health-home .hh-age-comparison strong{display:block;font-size:24px;font-weight:400;margin-top:5px}
+.health-home .hh-age-comparison small{font-size:10px;color:var(--muted);margin-left:4px}
+.health-home .hh-floor-layout{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.health-home .hh-stairs-mark{height:75px;display:flex;align-items:flex-end;gap:3px;padding-right:5px}
+.health-home .hh-stairs-mark span{width:11px;background:#d7e8f7}
+.health-home .hh-stairs-mark span:last-child{background:var(--blue)}
+.health-home .hh-floor-bottom{margin-top:auto}
+.health-home .hh-floor-bottom .hh-plot{margin-top:15px}
+.health-home .hh-stress-card .hh-stack{margin-top:28px}
+.health-home .hh-stress-card .hh-legend{row-gap:12px}
+.health-home .hh-heart-card .hh-value{margin-top:2px}
+.health-home .hh-heart-card .hh-plot{margin-top:13px}
+.health-home .hh-heart-card .hh-foot,.health-home .hh-respiration-card .hh-foot{padding-top:8px}
+.health-home .hh-breath-values{display:grid;grid-template-columns:1fr 1fr;margin-top:0}
+.health-home .hh-breath-values>div+div{padding-left:15px;border-left:1px solid var(--line)}
+.health-home .hh-breath-values .hh-value{font-size:29px}
+.health-home .hh-breath-values label{display:block;font-size:10px;color:var(--muted);margin-top:5px}
+.health-home .hh-respiration-card>.hh-small-muted{margin-top:6px}
+.health-home .hh-respiration-card .hh-plot{margin-top:8px}
+.health-home .hh-ftp-value{margin-top:8px}
+.health-home .hh-ftp-value .hh-value{font-size:39px}
+.health-home .hh-power-panel{margin-top:27px;border-top:1px solid var(--line);padding-top:12px;display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.health-home .hh-power-panel>span{font-size:10px;color:var(--muted)}
+.health-home .hh-power-panel strong{font-weight:400;font-size:27px;letter-spacing:-1px}
+.health-home .hh-power-panel small{font-size:11px;color:var(--muted);margin-left:4px;letter-spacing:0}
+.health-home .hh-pace-value{font-size:38px;line-height:1.2;letter-spacing:-1px;margin-top:5px}
+.health-home .hh-pace-value>span{font-size:28px;font-weight:300}
+.health-home .hh-pace-value small{font-size:11px;color:var(--muted);margin-left:6px;letter-spacing:0}
+.health-home .hh-threshold-details{display:grid;gap:10px;margin-top:23px;font-size:11px}
+.health-home .hh-threshold-details>div{display:flex;justify-content:space-between;gap:10px}
+.health-home .hh-threshold-details span{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.health-home .hh-threshold-details svg{width:14px;height:14px}
+.health-home .hh-threshold-details b{font-weight:500}
+.health-home .hh-threshold-details small{font-size:10px;font-weight:400;color:var(--muted)}
+.health-home .hh-vo2-layout{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:0}
+.health-home .hh-vo2-icon{width:68px;height:68px;background:var(--home-green-soft);border-radius:50%;display:grid;place-items:center;color:var(--green)}
+.health-home .hh-vo2-icon svg{width:37px;height:37px}
+.health-home .hh-vo2-layout .hh-value{font-size:49px}
+.health-home .hh-vo2-card>.hh-small-muted{text-align:right;margin-top:0}
+.health-home .hh-vo2-caption{font-size:14px;padding-top:28px}
+.health-home .hh-activity-heading{display:flex;align-items:center;gap:10px}
+.health-home .hh-activity-sport{background:var(--home-green-soft);border-radius:50%;width:40px;height:40px;display:grid;place-items:center;flex-shrink:0;color:var(--green)}
+.health-home .hh-activity-sport svg{width:23px;height:23px}
+.health-home .hh-activity-heading strong{font-size:15px;font-weight:550;display:block}
+.health-home .hh-activity-heading>div>span{display:block;font-size:10px;color:var(--muted);margin-top:4px}
+.health-home .hh-activity-time{font-size:28px;margin-top:18px;letter-spacing:-.7px}
+.health-home .hh-activity-time small{font-size:11px;color:var(--muted);margin:0 4px}
+.health-home .hh-activity-metrics{display:flex;gap:25px;margin-top:12px}
+.health-home .hh-activity-metrics strong{font-size:19px;font-weight:400;display:block}
+.health-home .hh-activity-metrics span{display:block;font-size:10px;color:var(--muted)}
+.health-home .hh-activity-link{display:flex;align-items:center;justify-content:space-between;color:var(--blue);font-size:10px;margin-top:auto;padding-top:15px}
+.health-home .hh-activity-link svg{width:14px;height:14px}
+.health-home .hh-empty-card{background:var(--home-empty);border-style:dashed}
+.health-home .hh-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1;min-height:165px}
+.health-home .hh-empty-icon{width:58px;height:58px;border-radius:50%;background:var(--surface-alt);color:var(--faint);display:grid;place-items:center;margin-bottom:16px}
+.health-home .hh-empty-icon svg{width:29px;height:29px}
+.health-home .hh-empty-state strong{font-weight:500;font-size:13px}
+.health-home .hh-empty-state p{font-size:11px;color:var(--muted);line-height:1.7;margin:7px 0 0;max-width:19em}
+.health-home .hh-intake-card .hh-value{font-size:38px;margin-top:5px}
+.health-home .hh-meal-count{color:var(--muted);font-size:12px;margin-top:17px}
+.health-home .hh-meal-count>span{font-size:19px;color:var(--text)}
+.health-home .hh-nutrient-meter{height:7px;background:var(--home-track);margin-top:30px;border-radius:3px;overflow:hidden}
+.health-home .hh-nutrient-meter span{height:100%;display:block;border-radius:3px}
+.health-home .hh-nutrient-card .hh-sub{margin-top:12px}
+.health-home .hh-meal-list{margin-top:-10px}
+.health-home .hh-meal-row{display:grid;grid-template-columns:40px 34px 1fr auto;gap:10px;border-top:1px solid var(--line);padding:15px 0;font-size:12px;align-items:baseline}
+.health-home .hh-meal-row:first-child{border-top:0}
+.health-home .hh-meal-row time,.health-home .hh-meal-kind{color:var(--muted);font-size:10px}
+.health-home .hh-meal-row>span{overflow-wrap:anywhere}
+.health-home .hh-meal-row strong{font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+.health-home .hh-meal-row strong small{font-size:10px;color:var(--muted);font-weight:400}
+.health-home .hh-meals-card>.hh-text-link{margin-top:auto;padding-top:15px}
+.health-home .hh-macro-layout{display:flex;gap:34px;align-items:center;justify-content:center;margin-top:10px}
+.health-home .hh-macro-donut{width:150px;height:150px;border-radius:50%;padding:15px;flex-shrink:0}
+.health-home .hh-macro-donut>div{border-radius:50%;height:100%;background:white;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.health-home .hh-macro-donut strong{font-size:29px;font-weight:400;letter-spacing:-1px}
+.health-home .hh-macro-donut small{font-size:10px;color:var(--muted)}
+.health-home .hh-macro-labels{display:grid;gap:14px;min-width:125px}
+.health-home .hh-macro-labels>div{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.health-home .hh-macro-labels>div>span{font-size:11px;display:flex;align-items:center;gap:6px}
+.health-home .hh-macro-labels strong{font-size:19px;font-weight:400}
+.health-home .hh-macro-labels small{font-size:10px;color:var(--muted);margin-left:3px}
+.health-home .hh-body-grid .hh-card{min-height:220px}
+.health-home .hh-weight-head{display:flex;align-items:baseline;gap:20px}
+.health-home .hh-weight-head>.hh-value{font-size:38px}
+.health-home .hh-delta{font-size:11px;color:var(--muted)}
+.health-home .hh-weight-card .hh-plot{margin-top:18px}
+.health-home .hh-weight-card .hh-foot{padding-top:8px}
+.health-home .hh-body-fat-card .hh-ring,.health-home .hh-body-score-card .hh-ring{height:132px;width:132px;margin-top:-10px}
+.health-home .hh-body-fat-card .hh-foot,.health-home .hh-body-score-card .hh-foot{justify-content:center;padding-top:8px}
+.health-home .hh-bmi-card>.hh-value{margin-top:8px}
+.health-home .hh-bmi-equation{display:flex;align-items:center;gap:18px;margin-top:24px}
+.health-home .hh-bmi-equation>div>span{display:block;font-size:10px;color:var(--muted)}
+.health-home .hh-bmi-equation strong{display:block;font-size:18px;font-weight:400;margin-top:4px}
+.health-home .hh-bmi-equation small{font-size:10px;color:var(--muted)}
+.health-home .hh-bmi-equation>span{color:#9ca6ae}
+.health-home .hh-water-layout{display:flex;align-items:center;gap:20px;margin-top:11px}
+.health-home .hh-water-vessel{position:relative;width:49px;height:85px;border:2px solid #9bbbd9;border-radius:3px 3px 13px 13px;padding:3px;overflow:hidden;flex-shrink:0;background:var(--surface-alt);display:flex;align-items:flex-end}
+.health-home .hh-water-vessel>div{background:#62abd7;width:100%;border-radius:0 0 9px 9px}
+.health-home .hh-water-layout .hh-value{font-size:32px}
+.health-home .hh-water-layout .hh-sub{max-width:8em;line-height:1.8}
+.health-home .hh-visceral-number{margin-top:4px}
+.health-home .hh-visceral-number .hh-value{font-size:41px}
+.health-home .hh-previous-measure{margin-top:22px;display:flex;align-items:baseline;justify-content:space-between;padding-top:12px;border-top:1px solid var(--line);gap:8px}
+.health-home .hh-previous-measure>span{font-size:10px;color:var(--muted)}
+.health-home .hh-previous-measure strong{font-size:21px;font-weight:400}
+.health-home .hh-previous-measure small{font-size:10px;color:var(--muted)}
+.health-home .hh-bone-readout{display:flex;align-items:center;gap:9px;margin-top:24px;color:var(--muted);font-size:11px}
+.health-home .hh-bone-readout svg{width:29px;height:29px;color:var(--faint)}
+.health-home .hh-metabolic-layout{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:17px}
+.health-home .hh-metabolic-layout .hh-value{font-size:38px}
+.health-home .hh-metabolic-symbol{width:77px;height:77px;background:var(--home-orange-soft);border-radius:50%;display:grid;place-items:center;color:var(--orange);flex-shrink:0}
+.health-home .hh-metabolic-symbol svg{width:36px;height:36px}
+.health-home .hh-protein-segments{display:flex;gap:3px;align-items:center;height:29px;margin-top:28px}
+.health-home .hh-protein-segments>span{flex:1;background:var(--home-track);height:20px;border-radius:2px}
+.health-home .hh-protein-segments>.hh-filled{background:var(--blue)}
+.health-home .hh-body-caption{margin:10px 0 0;color:var(--muted);font-size:11px}
+.health-home .hh-report-card{min-height:250px;padding:22px 24px}
+.health-home .hh-report-label{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+.health-home .hh-report-label svg{height:19px;width:19px;color:var(--blue)}
+.health-home .hh-report-label time{margin-left:auto;font-variant-numeric:tabular-nums}
+.health-home .hh-report-card h3{font-size:19px;margin:18px 0 13px;font-weight:550;line-height:1.6;letter-spacing:-.4px}
+.health-home .hh-report-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.9;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.health-home .hh-report-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:22px;font-size:11px}
+.health-home .hh-report-bottom>span{color:var(--muted)}
+.health-home .hh-report-bottom>a{display:flex;align-items:center;gap:6px;color:var(--blue)}
+.health-home .hh-report-bottom svg{width:14px;height:14px}
+.health-home .hh-weekly-report{border-top:3px solid #aab9c9}
+.health-home .hh-daily-report{border-top:3px solid #8db5dd}
+.health-home .hh-journal{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:24px;display:flex;align-items:center;gap:18px}
+.health-home .hh-journal-icon{color:var(--faint);width:45px;height:45px;display:grid;place-items:center;background:var(--surface-alt);border-radius:8px;flex-shrink:0}
+.health-home .hh-journal-icon svg{width:24px;height:24px}
+.health-home .hh-journal-copy{flex:1;min-width:0}
+.health-home .hh-journal p{margin:6px 0 0;color:var(--muted);font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.health-home .hh-journal strong{font-size:14px;font-weight:550}
+.health-home .hh-journal>a{color:var(--blue);white-space:nowrap;font-size:12px;display:flex;align-items:center;gap:6px}
+.health-home .hh-journal>a svg{width:14px;height:14px}
+.health-home .hh-journal-entry{padding-left:12px;border-left:2px solid #cad8e4}
+@media (min-width:1550px){.health-home .hh-garmin-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
 }
-.cockpit-report details summary { display: flex; justify-content: center; align-items: center; min-height: 44px; width: 44px; margin-left: auto; color: var(--teal); cursor: pointer; border-radius: 6px; }
-.cockpit-report details summary svg { width: 18px; height: 18px; transform: rotate(90deg); }
-.cockpit-report details[open] summary svg { transform: rotate(-90deg); }
-.cockpit-report details summary:hover { background: var(--teal-soft); }
-.cockpit-report:has(details[open]) .cockpit-report-preview { display: none; }
-.cockpit-report details summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
-.cockpit-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--teal); border-radius: 50%; animation: cockpit-spin .8s linear infinite; }
-@keyframes cockpit-spin { to { transform: rotate(360deg); } }
-@media(prefers-reduced-motion:reduce) { .cockpit-spinner { animation: none; } }
-.cockpit-chart-placeholder { height: 80px; display: grid; place-items: center; color: var(--muted); }
-.health-cockpit .page-heading p:empty { display: none; }
-.health-cockpit abbr { text-decoration: none; }
-@media(max-width:767px) {
-  body:has(.health-cockpit) .mobile-nav { grid-template-columns: repeat(6,minmax(0,1fr)) !important; }
-  body:has(.health-cockpit) .mobile-nav .nav-btn { min-width: 0; }
+@media (max-width:1200px){.health-home .hh-garmin-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.health-home .hh-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+.health-home .hh-body-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.health-home .hh-body-grid .hh-card{padding:16px 13px}
+.health-home .hh-body-grid .hh-value{font-size:28px}
+.health-home .hh-body-grid .hh-wide .hh-value{font-size:35px}
+.health-home .hh-macro-layout{gap:18px}
+.health-home .hh-macro-donut{width:125px;height:125px}
+.health-home .hh-macro-labels{min-width:110px}
+.health-home .hh-macro-labels>div{gap:10px}
+.health-home .hh-water-layout{gap:10px}
+.health-home .hh-water-layout .hh-sub{font-size:10px}
+.health-home .hh-water-vessel{width:36px}
+.health-home .hh-bmi-equation{gap:10px}
+.health-home .hh-body-fat-card .hh-ring,.health-home .hh-body-score-card .hh-ring{width:120px;height:120px}
 }
-/* Keep the disclosure control below the text in both states. */
-.cockpit-report details[open] { position: relative; padding-bottom: 44px; }
-.cockpit-report details[open] summary { position: absolute; right: 0; bottom: 0; margin: 0; }
+@media (max-width:900px){.health-home .hh-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.health-home .hh-garmin-grid .hh-card{min-height:280px}
+.health-home .hh-macro-layout{gap:24px}
+.health-home .hh-macro-donut{width:140px;height:140px}
+.health-home .hh-reports .hh-wide{grid-column:auto}
+.health-home .hh-body-grid .hh-value{font-size:34px}
+.health-home .hh-body-grid .hh-ring{width:130px;height:130px}
+.health-home .hh-body-grid .hh-wide .hh-value{font-size:38px}
+}
+@media (max-width:760px){.health-home .hh-grid{gap:9px}
+.health-home .hh-card{padding:15px 12px;min-height:200px}
+.health-home .hh-card-head{gap:6px}
+.health-home .hh-card-head h3{font-size:12px}
+.health-home .hh-glyph,.health-home .hh-glyph svg{width:19px;height:19px}
+.health-home .hh-value{font-size:30px}
+.health-home .hh-value small{font-size:10px}
+.health-home .hh-summary .hh-card{min-height:235px}
+.health-home .hh-summary .hh-card .hh-value{font-size:29px}
+.health-home .hh-summary .hh-steps-card .hh-ring{width:135px;height:135px}
+.health-home .hh-summary .hh-ring-center strong{font-size:30px}
+.health-home .hh-summary .hh-legend{gap:7px}
+.health-home .hh-summary .hh-legend b{font-size:11px}
+.health-home .hh-summary .hh-sleep-card .hh-stack{margin-top:24px}
+.health-home .hh-summary .hh-energy-card .hh-stack{margin-top:24px}
+.health-home .hh-summary .hh-energy-card .hh-legend{grid-template-columns:1fr;gap:10px}
+.health-home .hh-summary .hh-energy-card .hh-legend>span{grid-template-columns:6px 1fr auto}
+.health-home .hh-summary .hh-energy-card .hh-legend b{grid-column:auto}
+.health-home .hh-summary .hh-foot{font-size:9px}
+.health-home .hh-summary .hh-battery-card .hh-plot{margin-top:14px}
+.health-home .hh-summary .hh-battery-card .hh-foot{padding-top:4px}
+.health-home .hh-section{margin-top:26px}
+.health-home .hh-section-head h2{font-size:17px}
+.health-home .hh-source{font-size:10px}
+.health-home .hh-section-title{gap:8px}
+.health-home .hh-section-head a{font-size:11px}
+.health-home .hh-section-head{align-items:baseline}
+.health-home .hh-garmin-grid .hh-card{min-height:265px}
+.health-home .hh-garmin-grid .hh-card-head{margin-bottom:16px}
+.health-home .hh-garmin-grid .hh-gauge{width:155px;height:146px}
+.health-home .hh-gauge-center{inset:45px 0 0}
+.health-home .hh-gauge-center .hh-value{font-size:33px}
+.health-home .hh-foot{font-size:9px;line-height:1.7;padding-top:15px}
+.health-home .hh-paired-values{gap:6px;margin-top:20px}
+.health-home .hh-paired-values .hh-value{font-size:25px}
+.health-home .hh-paired-values>div:last-child .hh-value{font-size:23px}
+.health-home .hh-paired-values label{font-size:9px}
+.health-home .hh-range-labels{font-size:8px}
+.health-home .hh-focus-title{font-size:15px;line-height:1.5}
+.health-home .hh-focus-item>div:first-child{font-size:9px}
+.health-home .hh-focus-card .hh-foot{flex-direction:column;gap:0;font-size:8px}
+.health-home .hh-status-head{gap:5px}
+.health-home .hh-status-head .hh-tag{font-size:9px;padding:2px 4px;gap:3px}
+.health-home .hh-baseline-readout{font-size:9px;flex-wrap:wrap;gap:2px;margin-top:18px}
+.health-home .hh-intensity-card .hh-ring{width:133px;height:133px;margin-top:-7px}
+.health-home .hh-intensity-split{gap:5px;font-size:9px;flex-wrap:wrap}
+.health-home .hh-training-caption{margin-top:15px}
+.health-home .hh-age-hero{gap:5px;flex-wrap:wrap;margin-top:10px;margin-bottom:18px}
+.health-home .hh-age-hero .hh-value{font-size:31px}
+.health-home .hh-age-hero>span{font-size:10px}
+.health-home .hh-age-comparison>div+div{padding-left:10px}
+.health-home .hh-age-comparison strong{font-size:22px}
+.health-home .hh-floor-layout{gap:5px}
+.health-home .hh-stairs-mark{height:65px;gap:2px;padding:0}
+.health-home .hh-stairs-mark span{width:8px}
+.health-home .hh-stress-card .hh-status-head{flex-direction:column;align-items:flex-start;gap:5px}
+.health-home .hh-stress-card .hh-stack{margin-top:17px}
+.health-home .hh-stress-card .hh-legend{gap:8px}
+.health-home .hh-stress-card .hh-legend b{font-size:12px}
+.health-home .hh-breath-values>div+div{padding-left:10px}
+.health-home .hh-breath-values .hh-value{font-size:27px}
+.health-home .hh-breath-values label{font-size:9px}
+.health-home .hh-ftp-value .hh-value{font-size:34px}
+.health-home .hh-power-panel{gap:6px;flex-wrap:wrap;margin-top:24px}
+.health-home .hh-power-panel strong{font-size:25px}
+.health-home .hh-pace-value{font-size:32px}
+.health-home .hh-pace-value>span{font-size:25px}
+.health-home .hh-pace-value small{font-size:9px;margin-left:3px}
+.health-home .hh-threshold-details{font-size:10px;gap:8px;margin-top:21px}
+.health-home .hh-threshold-details span{gap:4px}
+.health-home .hh-threshold-details svg{width:12px;height:12px}
+.health-home .hh-threshold-details small{font-size:9px}
+.health-home .hh-vo2-icon{width:48px;height:48px}
+.health-home .hh-vo2-icon svg{width:28px;height:28px}
+.health-home .hh-vo2-layout{margin-top:14px;gap:4px}
+.health-home .hh-vo2-layout .hh-value{font-size:38px}
+.health-home .hh-vo2-caption{padding-top:30px;font-size:12px}
+.health-home .hh-activity-heading{gap:7px;align-items:flex-start}
+.health-home .hh-activity-sport{width:31px;height:31px}
+.health-home .hh-activity-sport svg{width:19px;height:19px}
+.health-home .hh-activity-heading strong{font-size:12px}
+.health-home .hh-activity-heading>div>span{font-size:9px}
+.health-home .hh-activity-time{font-size:25px;margin-top:22px}
+.health-home .hh-activity-metrics{gap:20px}
+.health-home .hh-empty-state{min-height:180px}
+.health-home .hh-empty-state p{font-size:10px}
+.health-home .hh-empty-state strong{font-size:12px}
+.health-home .hh-empty-icon{width:51px;height:51px}
+.health-home .hh-empty-icon svg{width:25px;height:25px}
+.health-home .hh-wide{grid-column:span 2}
+.health-home .hh-nutrient-card,.health-home .hh-intake-card{min-height:202px}
+.health-home .hh-nutrient-card .hh-sub{font-size:10px}
+.health-home .hh-meal-row{grid-template-columns:36px 1fr auto;gap:7px;font-size:11px;padding:13px 0}
+.health-home .hh-meal-kind{display:none}
+.health-home .hh-meal-row strong small{font-size:9px}
+.health-home .hh-macro-layout{gap:30px;margin:4px 0 10px}
+.health-home .hh-macro-donut{width:138px;height:138px;padding:14px}
+.health-home .hh-macro-labels{min-width:120px}
+.health-home .hh-body-grid .hh-card{min-height:225px}
+.health-home .hh-body-grid .hh-value{font-size:30px}
+.health-home .hh-body-grid .hh-wide .hh-value{font-size:35px}
+.health-home .hh-weight-head{gap:12px;flex-wrap:wrap}
+.health-home .hh-delta{font-size:10px}
+.health-home .hh-water-vessel{width:40px;height:79px}
+.health-home .hh-water-layout{flex-direction:column;gap:13px;align-items:flex-start;margin-top:2px}
+.health-home .hh-water-layout .hh-value{font-size:29px}
+.health-home .hh-water-layout .hh-sub{max-width:none}
+.health-home .hh-water-card .hh-foot{font-size:8px}
+.health-home .hh-water-layout .hh-sub{font-size:9px}
+.health-home .hh-water-vessel{position:absolute;right:12px;top:57px;width:31px;height:55px}
+.health-home .hh-water-layout>div:last-child{margin-top:52px}
+.health-home .hh-metabolic-layout .hh-value{font-size:33px}
+.health-home .hh-metabolic-symbol{height:60px;width:60px}
+.health-home .hh-metabolic-symbol svg{width:29px;height:29px}
+.health-home .hh-bmi-equation{gap:13px}
+.health-home .hh-bmi-equation strong{font-size:17px}
+.health-home .hh-body-grid .hh-body-fat-card .hh-ring,.health-home .hh-body-grid .hh-body-score-card .hh-ring{width:129px;height:129px;margin-top:0}
+.health-home .hh-protein-segments{gap:2px}
+.health-home .hh-protein-segments span{border-radius:1px}
+.health-home .hh-protein-segments+.hh-foot{font-size:8px}
+.health-home .hh-reports{grid-template-columns:1fr}
+.health-home .hh-reports .hh-wide{grid-column:auto}
+.health-home .hh-report-card{padding:20px;min-height:245px}
+.health-home .hh-report-card h3{font-size:18px}
+.health-home .hh-journal{padding:18px;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.health-home .hh-journal-icon{width:35px;height:35px}
+.health-home .hh-journal-icon svg{width:21px;height:21px}
+.health-home .hh-journal-copy{flex-basis:calc(100% - 48px)}
+.health-home .hh-journal>a{margin-left:47px}
+.health-home .hh-journal p{font-size:11px}
+.health-home .hh-body-caption{font-size:10px}
+.health-home .hh-data-table>summary{font-size:9px;min-height:24px}
+.health-home .hh-empty-card .hh-card-head h3{font-size:11px}
+}
+@media (max-width:370px){.health-home .hh-card{padding:13px 10px}
+.health-home .hh-ring-center strong{font-size:30px}
+.health-home .hh-garmin-grid .hh-gauge{width:135px}
+.health-home .hh-pace-value{font-size:27px}
+.health-home .hh-pace-value>span{font-size:22px}
+.health-home .hh-macro-layout{gap:18px}
+.health-home .hh-macro-donut{width:120px;height:120px}
+.health-home .hh-macro-labels{min-width:110px}
+.health-home .hh-section-title{gap:5px}
+.health-home .hh-body-grid .hh-body-fat-card .hh-ring,.health-home .hh-body-grid .hh-body-score-card .hh-ring{width:115px;height:115px}
+.health-home .hh-weight-head{gap:5px}
+}
+@media (prefers-reduced-motion:reduce){}
+@media (forced-colors:active){.health-home .hh-target-fill,.health-home .hh-ring-fill{forced-color-adjust:none}
+.health-home .hh-stack>span{outline:1px solid CanvasText}
+.health-home .hh-target-zone{border:1px dashed CanvasText}
+.health-home .hh-macro-donut{outline:2px solid CanvasText}
+}
+.health-home .hh-protein-segments>span{overflow:hidden}
+.health-home .hh-protein-segments>span>i{display:block;height:100%;background:var(--blue)}
+.health-home{--home-green-soft:#edf6f1;--home-orange-soft:#fff4e8;--home-warning-text:#925011;--home-green-text:#267558}
+.health-home .page-heading{margin-bottom:25px;align-items:center}
+.health-home .page-heading h1{font-size:28px;letter-spacing:-.8px}
+.health-home .page-heading .eyebrow{color:var(--muted);letter-spacing:0}
+.health-home .page-heading p:empty{display:none}
+.health-home .hh-section{scroll-margin-top:85px}
+.health-home .hh-section-head>a{display:inline-flex;align-items:center;gap:5px;min-height:28px}
+.health-home .hh-section-head>a>svg{width:14px;height:14px}
+.health-home .hh-home-module-message{grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;font-size:12px;line-height:1.7;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.health-home .hh-home-module-message button{border:0;background:transparent;color:var(--blue);font:inherit;cursor:pointer;flex-shrink:0;padding:7px 0}
+.health-home .hh-energy-balance{border-top:1px solid var(--line);padding-top:11px;margin-top:14px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.health-home .hh-energy-balance>span{font-size:11px;color:var(--muted)}
+.health-home .hh-energy-balance .hh-value{font-size:23px}
+.health-home .hh-home-skeleton{min-height:250px;gap:24px}
+.health-home .hh-home-skeleton>span,.health-home .hh-home-skeleton>b,.health-home .hh-home-skeleton>i{display:block;background:var(--home-track);border-radius:4px;max-width:85%;height:13px;width:100px}
+.health-home .hh-home-skeleton>b{height:35px;width:85px}
+.health-home .hh-home-skeleton>i{height:60px;width:100%;margin-top:auto}
+.cockpit-spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:home-spin .8s linear infinite}
+@keyframes home-spin{to{transform:rotate(360deg)}
+}
+:root[data-theme="dark"] .health-home{--blue:#3987e5;--green:#69bfa2;--orange:#e4a366;--purple:#b4a0ed;--red:#ec9292;--cyan:#77c6da;--home-track:#2d3c46;--home-empty:#19252d;--home-green-soft:#243e34;--home-orange-soft:#42372a;--home-warning-text:#f1bd83;--home-green-text:#96d4b6}
+:root[data-theme="dark"] .health-home .hh-target-zone{border-color:#9cacb7;background:transparent}
+:root[data-theme="dark"] .health-home .hh-training-emblem{background:#443c26;color:#e7c76d}
+:root[data-theme="dark"] .health-home .hh-paired-values>div:last-child .hh-value{color:var(--muted)}
+:root[data-theme="dark"] .health-home .hh-age-comparison,:root[data-theme="dark"] .health-home .hh-readiness-card .hh-foot{border-color:var(--line)}
+:root[data-theme="dark"] .health-home .hh-water-vessel{border-color:#6c9dbc}
+:root[data-theme="dark"] .health-home .hh-stairs-mark span{background:#354c60}
+:root[data-theme="dark"] .health-home .hh-stairs-mark span:last-child{background:var(--blue)}
+@media (max-width:760px){.health-home .page-heading{align-items:stretch;gap:14px;flex-direction:column}
+.health-home .page-heading h1{font-size:25px}
+.health-home .page-heading>.date-selector{width:100%;margin:0;justify-content:center}
+.health-home .hh-section-head>a{font-size:10px}
+.health-home .hh-section-head>a>svg{width:12px;height:12px}
+.health-home .hh-card-head h3{line-height:1.6}
+.health-home .hh-glyph,.health-home .hh-glyph svg{flex-shrink:0}
+}
+@media (max-width:380px){.health-home .hh-glyph,.health-home .hh-glyph svg{width:17px;height:17px}
+.health-home .hh-card-head h3{font-size:11px}
+.health-home .hh-glyph{margin-right:0}
+.health-home .hh-garmin-grid .hh-gauge{max-width:100%}
+.health-home .hh-status-head .hh-value{font-size:27px}
+}
+@media (prefers-reduced-motion:reduce){.cockpit-spinner{animation:none}
+}
+@media(max-width:360px){.health-home .hh-grid .hh-card .hh-ring{width:110px;height:110px;max-width:100%}.health-home .hh-ring-center strong{font-size:27px}.health-home .hh-card .hh-card-head{gap:5px}}
+/* Feedback's global mobile rule has a 68px minimum; home keeps all six entries visible. */
+@media(max-width:767px){body:has(.health-home) .mobile-nav{grid-template-columns:repeat(6,minmax(0,1fr))!important;overflow-x:hidden!important}body:has(.health-home) .mobile-nav .nav-btn{min-width:0}}
 
-@media(max-width:700px) { .cockpit-energy strong { font-size: 25px; } .cockpit-energy strong small { display: block; margin: 3px 0 0; } }
-/* A regular grid keeps card edges aligned across the dashboard. */
-.cockpit-grid { align-items: stretch; }
-.cockpit-reports { grid-row: auto; }
-@media(min-width:701px) { .cockpit-journal { grid-column: 1 / -1; } }
-@media(max-width:380px) { .cockpit-nutrient strong small { display: block; margin-top: 3px; } }
+.health-home .hh-macro-donut{position:relative;padding:0}
+.health-home .hh-macro-donut>.hh-donut-center{position:absolute;inset:0;height:auto;background:none;pointer-events:none;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.health-home .hh-macro-donut canvas{display:block;width:100%;height:100%}
+.health-home a.hh-report-card{color:var(--text)}
+.health-home a.hh-report-card:hover{border-color:var(--blue)}
+.health-home .hh-report-bottom>svg{width:18px;height:18px;color:var(--blue)}
+
+.health-home .hh-daily-nutrient-reference{font-size:11px;color:var(--muted);margin-top:10px}
+.health-home .hh-nutrient-card .hh-nutrient-meter{margin-top:16px}
+@media(max-width:760px){.health-home .hh-daily-nutrient-reference{font-size:10px}}

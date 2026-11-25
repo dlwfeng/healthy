@@ -76,8 +76,10 @@ class HealthReports {
       this.kind = "daily";
       this.date = this.today();
     }
-    await this.load();
-    if (q.get("report")) await this.read(q.get("report"), false);
+    if (q.get("report")) {
+      void this.load(false, true);
+      await this.read(q.get("report"), false);
+    } else await this.load();
   }
   leave() {
     this.active = false;

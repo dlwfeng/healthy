@@ -186,6 +186,7 @@ const state = {
     },
   ],
 };
+if (state.page === "home") state.date = localDate();
 const main = document.getElementById("app-main"),
   companion = document.getElementById("companion"),
   drawer = document.getElementById("metric-drawer");
@@ -581,7 +582,7 @@ function connectionNote() {
       ([key, value]) => key !== "activityCount" && present(value),
     )
   )
-    return `<div class="daily-empty-note" role="status"><div><strong>这一天还没有身体指标</strong><p>可以回看之前的记录，或在设备同步后刷新。</p></div><button class="secondary-btn" type="button" data-date-shift="-1">查看前一天 ${icon("arrow")}</button></div>`;
+    return `<div class="daily-empty-note" role="status"><div><strong>这一天还没有身体指标</strong><p>可以回看之前的记录，或在设备同步后刷新。</p></div><button class="secondary-btn" type="button" data-refresh>刷新数据 ${icon("refresh")}</button></div>`;
   return "";
 }
 function batteryCard() {
@@ -1004,6 +1005,7 @@ function render() {
     `repeat(${navigation.length},minmax(0,1fr))`;
   document.getElementById("mobile-nav").innerHTML = navigation.map((group) => `<a href="#${group.page}" class="nav-btn ${group === currentGroup ? "active" : ""}" data-goto="${group.page}" aria-label="${group.label}" ${group.page === state.page ? 'aria-current="page"' : ""}>${icon(group.icon)}<span>${group.label}</span></a>`).join("");
   const mobileSubnav = currentGroup.children.length ? `<nav class="module-subnav" aria-label="${currentGroup.label}菜单">${currentGroup.children.map(([id, name]) => `<a href="#${id}" data-goto="${id}" ${id === state.page ? 'aria-current="page"' : ""}>${name}</a>`).join("")}</nav>` : "";
+  homeDashboard.destroy();
   destroyLineCharts(main);
   main.innerHTML = mobileSubnav + ({
     home,
@@ -1019,6 +1021,7 @@ function render() {
     memory: () => healthMemory.render(),
   }[state.page]());
   mountLineCharts(main);
+  if (state.page === "home") homeDashboard.mount(main);
   if (state.page === "reports") healthReports.mount();
   const synced = state.data?.syncedAt ? timeLabel(state.data.syncedAt) : "";
   document.getElementById("sync-state").innerHTML =
@@ -1075,8 +1078,8 @@ function renderBreadcrumbs(group) {
 function writeUrl(push = false) {
   const url = new URL(location.href);
   url.hash = state.page;
-  url.searchParams.set("date", state.date);
-  url.searchParams.set("days", state.days);
+  if (state.page === "home") { url.searchParams.delete("date"); url.searchParams.delete("days"); }
+  else { url.searchParams.set("date", state.date); url.searchParams.set("days", state.days); }
   history[push ? "pushState" : "replaceState"]({}, "", url);
 }
 function navigate(next, push = true) {
@@ -1085,6 +1088,12 @@ function navigate(next, push = true) {
   if (state.page === "feedback" && next !== "feedback") feedback.leave();
   if (state.page === "reports" && next !== "reports") healthReports.leave();
   state.page = next;
+  if (next === "home") state.date = localDate();
+  const reportId = new URLSearchParams(location.search).get("report");
+  if (next === "reports" && !push && /^[1-9]\d{0,17}$/.test(reportId || "")) {
+    if (String(healthReports.detail?.id) !== reportId) { healthReports.detail = null; healthReports.bundle = null; }
+    healthReports.loadingDetail = true;
+  }
   if (push) {
     const url = new URL(location.href);
     for (const key of [
@@ -1113,6 +1122,7 @@ function navigate(next, push = true) {
     if (url.href !== location.href) history.pushState({}, "", url);
   }
   if (next === "home") {
+    writeUrl();
     void homeDashboard.open(state.date);
     if (state.data?.date !== state.date) void loadGarmin();
   }
@@ -1187,6 +1197,7 @@ async function loadJournal() {
   if (state.page === "journal") render();
 }
 async function loadGarmin(refresh = false) {
+  if (state.page === "home") { state.date = localDate(); writeUrl(); }
   if (state.page === "home") void homeDashboard.open(state.date, refresh);
   const req = ++state.request;
   garminController?.abort();
@@ -1282,6 +1293,14 @@ document.addEventListener("click", (e) => {
   const target = e.target.closest("button, a, #overlay-backdrop");
   if (!target) return;
   if (target.closest('[data-pi-meal-save]')) { void savePiMeal(); return; }
+  if (target.hasAttribute("data-home-report")) {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    const url = new URL(target.href);
+    history.pushState({}, "", url);
+    navigate("reports", false);
+    return;
+  }
   const go = target.closest("[data-goto]");
   if (go) {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -1343,6 +1362,7 @@ document.addEventListener("click", (e) => {
     drawer.querySelector("button")?.focus({ preventScroll: true });
     return;
   }
+  if (target.hasAttribute("data-home-retry")) { void homeDashboard.open(state.date, true); return; }
   if (target.hasAttribute("data-date-shift")) {
     setDate(shiftDate(state.date, Number(target.dataset.dateShift)));
     return;
@@ -1489,7 +1509,7 @@ function restoreUrl() {
   const trainingDate = q.get("training_date");
   if (trainingCalendar.validDate(trainingDate) && trainingDate !== trainingCalendar.selected) trainingCalendar.select(trainingDate);
   navigate(page, false);
-  if (changed || changedDays) void loadGarmin();
+  if ((changed || changedDays) && page !== "home") void loadGarmin();
 }
 window.addEventListener("popstate", restoreUrl);
 // Native hash links (brand and skip link) also remain usable without JavaScript navigation.
@@ -1716,3 +1736,7 @@ if (state.page === "journal") void loadJournal();
 if(state.page === "feedback")void feedback.open();
 if(state.page === "memory")void healthMemory.load();
 document.addEventListener("click", event => { if (event.target.closest("[data-memory-refresh]")) void healthMemory.load(); });
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && state.page === "home" && state.date !== localDate()) void loadGarmin(true);
+});
