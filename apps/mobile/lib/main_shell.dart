@@ -137,8 +137,9 @@ class _MainShellState extends State<MainShell> {
         serverVersion++;
         piKey = GlobalKey<PiChatState>();
       });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('服务地址已更新')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('服务地址已更新')));
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -158,6 +159,8 @@ class _MainShellState extends State<MainShell> {
       case 'home':
         return HomeDashboard(
           garminApi: widget.garminApi,
+          active: page == "home" && !more,
+          onNavigate: navigate,
           storage: widget.storage,
           selectedDate: date,
           onDateChanged: (d) => setState(() => date = d),

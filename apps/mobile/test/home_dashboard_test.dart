@@ -149,66 +149,56 @@ void main() {
   });
 
   group('HomeDashboard Widget', () {
-    testWidgets(
-      'renders a read-only cockpit with body, meals, reports and activity',
-      (tester) async {
-        await tester.binding.setSurfaceSize(const Size(800, 1600));
-        addTearDown(() => tester.binding.setSurfaceSize(null));
+    testWidgets('renders the six-region current-status home', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 1600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
 
-        final garminClient = MockClient((req) async {
-          if (req.url.path == '/api/health/status') {
-            return jsonResponse({'state': 'ready'});
-          }
-          if (req.url.path == '/api/health/overview') {
-            return jsonResponse(sampleOverview);
-          }
-          return jsonResponse({'error': 'not_found'}, 404);
-        });
+      final garminClient = MockClient((req) async {
+        if (req.url.path == '/api/health/status') {
+          return jsonResponse({'state': 'ready'});
+        }
+        if (req.url.path == '/api/health/overview') {
+          return jsonResponse(sampleOverview);
+        }
+        if (req.url.path == '/api/health/body-status') {
+          return jsonResponse({
+            'lastActivity': (sampleOverview['recentActivities'] as List).first,
+          });
+        }
+        return jsonResponse({'entries': [], 'reports': []});
+      });
 
-        final garminApi = GarminApi(client: garminClient);
-        final storage = MemoryStore();
+      final garminApi = GarminApi(client: garminClient);
+      final storage = MemoryStore();
 
-        await tester.pumpWidget(
-          MaterialApp(
-            home: HomeDashboard(
-              garminApi: garminApi,
-              storage: storage,
-              selectedDate: '2026-10-18',
-              onDateChanged: (_) {},
-            ),
+      await tester.pumpWidget(
+        MaterialApp(
+          home: HomeDashboard(
+            garminApi: garminApi,
+            storage: storage,
+            selectedDate: '2026-10-18',
+            onDateChanged: (_) {},
           ),
-        );
-        await tester.pumpAndSettle();
+        ),
+      );
+      await tester.pumpAndSettle();
 
-        expect(find.text('Garmin 已连接'), findsOneWidget);
-        expect(find.text('身体电量'), findsOneWidget);
-        expect(find.text('昨夜睡眠'), findsOneWidget);
-        expect(find.text('训练准备度'), findsOneWidget);
-        expect(find.text('当日步数'), findsOneWidget);
-        expect(find.byType(ActionChip), findsNothing);
-        await tester.scrollUntilVisible(
-          find.text('身体信号'),
-          350,
-          scrollable: find.byType(Scrollable).first,
-        );
-        expect(find.text('静息心率'), findsOneWidget);
-        expect(find.text('夜间 HRV'), findsOneWidget);
-        await tester.scrollUntilVisible(
-          find.text('健康报告'),
-          350,
-          scrollable: find.byType(Scrollable).first,
-        );
-        expect(find.text('日报'), findsOneWidget);
-        expect(find.text('周报'), findsOneWidget);
-        await tester.scrollUntilVisible(
-          find.text('运动与活动'),
-          350,
-          scrollable: find.byType(Scrollable).first,
-        );
-        expect(find.text('晨跑 5 公里'), findsOneWidget);
-        expect(tester.takeException(), isNull);
-      },
-    );
+      expect(find.text('Garmin 已连接'), findsOneWidget);
+      expect(find.text('身体电量'), findsOneWidget);
+      expect(find.text('昨夜睡眠'), findsOneWidget);
+      expect(find.text('训练准备程度'), findsOneWidget);
+      expect(find.text('当日步数'), findsOneWidget);
+      expect(find.byType(ActionChip), findsNothing);
+      expect(find.byTooltip('前一天'), findsNothing);
+      expect(find.text('HRV 状态'), findsOneWidget);
+      expect(find.text('静息心率'), findsOneWidget);
+      expect(find.text('报告'), findsOneWidget);
+      expect(find.text('健康日报'), findsOneWidget);
+      expect(find.text('健康周报'), findsOneWidget);
+      expect(find.text('上一次活动'), findsOneWidget);
+      expect(find.text('晨跑 5 公里'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
 
     testWidgets(
       'shows unconfigured message when Garmin state is not_configured',
@@ -279,8 +269,11 @@ void main() {
         expect(find.text('健康首页'), findsWidgets);
         expect(find.text('生理指标'), findsOneWidget);
         expect(find.text('活动统计'), findsOneWidget);
-        expect(find.descendant(of: find.byType(PiDock), matching: find.text('饮食记录')), findsOneWidget);
-        expect(find.text('报告'), findsNothing);
+        expect(
+          find.descendant(of: find.byType(PiDock), matching: find.text('饮食记录')),
+          findsOneWidget,
+        );
+        expect(find.text('报告'), findsOneWidget);
 
         // 当前在 Tab 0: 今日
         expect(find.text('身体电量'), findsOneWidget);
