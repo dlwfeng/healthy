@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>首页设计草稿 · 健康助手</title>
+<link rel="stylesheet" href="./home-connect.css?v=2">
+</head>
+<body>
+<aside class="rail"><a class="brand" href="#summary"><span class="brand-mark">＋</span>健康助手</a><nav aria-label="首页区域"><a href="#summary"><span class="nav-icon">▦</span>摘要</a><a href="#exercise"><span class="nav-icon">◴</span>运动</a><a href="#food"><span class="nav-icon">◒</span>饮食</a><a href="#body"><span class="nav-icon">◎</span>身体成分</a><a href="#reports"><span class="nav-icon">▤</span>报告</a><a href="#journal"><span class="nav-icon">▧</span>个人记录</a></nav><div class="rail-foot">我的健康空间<br><small>身体、运动与生活，放在一起看。</small></div></aside>
+<div class="shell"><header class="topbar"><div><span class="crumb">我的健康 / 首页</span><span class="draft">设计草稿</span></div><span id="sync" class="top-status">正在读取数据</span></header><main>
+<div class="page-head"><div><h1>我的健康</h1><p>关注今天，也看见每一次积累。</p></div><div class="date-controls"><input id="date" type="date" aria-label="查看日期"><button id="today">今天</button><button id="refresh" aria-label="重新读取数据">刷新</button></div></div>
+<section class="section" id="summary"><header class="section-head"><div class="section-title"><h2>摘要</h2><span class="source">一天的关键数据</span></div></header><div class="grid summary" id="summary-content"><div class="loading">正在读取摘要…</div></div></section>
+<section class="section" id="exercise"><header class="section-head"><div class="section-title"><h2>运动</h2><span class="source">Garmin Connect</span></div><a href="/#trends">查看指标详情</a></header><div class="grid garmin-grid" id="exercise-content"><div class="loading">正在读取 Garmin 数据…</div></div></section>
+<section class="section" id="food"><header class="section-head"><div class="section-title"><h2>饮食</h2><span class="source">已保存的饮食记录</span></div><a href="/#food">查看饮食记录</a></header><div class="grid" id="food-content"><div class="loading">正在读取饮食记录…</div></div></section>
+<section class="section" id="body"><header class="section-head"><div class="section-title"><h2>身体成分</h2><span class="source">Zepp Life</span></div><span class="source" id="body-date"></span></header><div class="grid compact body-grid" id="body-content"><div class="loading">正在读取身体成分…</div></div><p class="body-caption">显示所选日期之前的最近一次测量。身体成分为体脂秤估算。</p></section>
+<section class="section" id="reports"><header class="section-head"><div class="section-title"><h2>报告</h2><span class="source">健康助手</span></div><a href="/#reports">全部报告</a></header><div class="grid reports" id="reports-content"><div class="loading">正在读取报告…</div></div></section>
+<section class="section" id="journal"><header class="section-head"><div class="section-title"><h2>个人记录</h2><span class="source">感受、状态与日常</span></div></header><div class="journal" id="journal-content"><p>正在读取记录…</p></div></section>
+<p class="note">首页布局草稿 · 数据来自现有只读接口 · 缺失读数保留为空，不使用演示数值。</p>
+</main></div>
+<script src="../vendor/chart.umd.min.js" defer></script>
+<script src="./home-connect.js?v=2" defer></script>
+</body></html>
